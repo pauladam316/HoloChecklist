@@ -6,6 +6,9 @@ public class cApplicationManager: MonoBehaviour {
 
 	public IApplicationState CurrentState;
 
+	public cRoomMappingState RoomMappingState;
+	public cItemPlacingState ItemPlacingState;
+
 	public void ChangeState(IApplicationState state)
 	{
 		CurrentState.Stop();

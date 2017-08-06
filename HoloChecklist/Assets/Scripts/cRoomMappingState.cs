@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VR.WSA.Input;
 
 public class cRoomMappingState :  MonoBehaviour, IApplicationState
 {
@@ -11,11 +12,21 @@ public class cRoomMappingState :  MonoBehaviour, IApplicationState
 	};
 
 	private cUIManager mUIManager;
+	private GestureRecognizer gestureRecognizer;
+	private cApplicationManager mApplicationManager;
 
 	public void Begin()
 	{
+		mApplicationManager = GameObject.FindObjectOfType<cApplicationManager>();
+
 		mUIManager = GameObject.FindObjectOfType<cUIManager>();
 		mUIManager.UpdateUI(UI_STRINGS[0]);
+
+		gestureRecognizer = new GestureRecognizer();
+		gestureRecognizer.SetRecognizableGestures(GestureSettings.Tap);
+		gestureRecognizer.TappedEvent += GestureRecognizer_TappedEvent;
+		gestureRecognizer.StartCapturingGestures();
+
 	}
 
 	public void Stop()
@@ -26,5 +37,10 @@ public class cRoomMappingState :  MonoBehaviour, IApplicationState
 	void IApplicationState.Update()
 	{
 
+	}
+
+	private void GestureRecognizer_TappedEvent(InteractionSourceKind source, int tapCount, Ray headRay)
+	{
+		mApplicationManager.ChangeState(GameObject.FindObjectOfType<cItemPlacingState>());
 	}
 }
