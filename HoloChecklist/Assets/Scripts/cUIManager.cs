@@ -10,4 +10,10 @@ public class cUIManager : MonoBehaviour {
 	{
 		Text.text = text;
 	}
+
+	private void Update()
+	{
+		transform.LookAt(Camera.main.transform);
+		transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y + 180, transform.eulerAngles.z);
+	}
 }
