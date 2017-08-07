@@ -2,27 +2,44 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VR.WSA;
 using UnityEngine.VR.WSA.Input;
 
-public class cRoomMappingState :  MonoBehaviour, IApplicationState
+public class cRoomMappingState: IApplicationState
 {
 	public string[] UI_STRINGS =
 	{
-		"Look around to map the room\n Tap to continue"
+		"Look around to map the room\n Tap to continue"								//UI Elements to be shown on screen during room mapping
 	};
 
-	private cUIManager mUIManager;
-	private GestureRecognizer gestureRecognizer;
-	private cApplicationManager mApplicationManager;
+	private cUIManager mUIManager;													//Reference to the UI manager
+	private GestureRecognizer gestureRecognizer;									//Used for recognizing hololens air tap
+	private cApplicationManager mApplicationManager;								//Reference to the application manager
+
+	private SpatialMappingRenderer mRenderer;										//Reference to the spatial mappers
+	private SpatialMappingCollider mCollider;
 
 	public void Begin()
 	{
-		mApplicationManager = GameObject.FindObjectOfType<cApplicationManager>();
+		mApplicationManager = GameObject.FindObjectOfType<cApplicationManager>();	//Get the manager
+		if (mRenderer == null)
+		{
+			mRenderer = GameObject.FindObjectOfType<SpatialMappingRenderer>();				
+		}
+		if (mCollider == null)
+		{
+			mCollider = GameObject.FindObjectOfType<SpatialMappingCollider>();
+		}
 
-		mUIManager = GameObject.FindObjectOfType<cUIManager>();
-		mUIManager.UpdateUI(UI_STRINGS[0]);
+		mRenderer.gameObject.SetActive(true);										//Default to active and unfrozen
+		mRenderer.freezeUpdates = false;
+		mCollider.gameObject.SetActive(true);
+		mCollider.freezeUpdates = false;
 
-		gestureRecognizer = new GestureRecognizer();
+		mUIManager = GameObject.FindObjectOfType<cUIManager>();						//Get the UI Manager
+		mUIManager.UpdateUI(UI_STRINGS[0]);											//Set the UI text to the first string
+
+		gestureRecognizer = new GestureRecognizer();								//Setup Gesture Recognizer
 		gestureRecognizer.SetRecognizableGestures(GestureSettings.Tap);
 		gestureRecognizer.TappedEvent += GestureRecognizer_TappedEvent;
 		gestureRecognizer.StartCapturingGestures();
@@ -41,6 +58,9 @@ public class cRoomMappingState :  MonoBehaviour, IApplicationState
 
 	private void GestureRecognizer_TappedEvent(InteractionSourceKind source, int tapCount, Ray headRay)
 	{
-		mApplicationManager.ChangeState(GameObject.FindObjectOfType<cItemPlacingState>());
+		mCollider.freezeUpdates = true;												//When the user taps, hide and freeze the spatial map, move on to the list placing
+		mRenderer.freezeUpdates = true;
+		mRenderer.gameObject.SetActive(false);
+		mApplicationManager.ChangeState(new cItemPlacingState());
 	}
 }
