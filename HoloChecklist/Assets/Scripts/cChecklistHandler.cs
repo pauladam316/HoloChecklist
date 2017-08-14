@@ -6,16 +6,30 @@ using UnityEngine;
 public class cChecklistHandler : MonoBehaviour {
 
 	public cChecklistButton ExpandButton;
-	
+	public cChecklistButton MinimizeButton;
+	public cChecklistButton TakePhotoButton;
+
+	public GameObject MaximizedElement;
+	public GameObject ActiveItem;
 
 	// Use this for initialization
 	void Start () {
 		ExpandButton.OnPropertyChanged += ExpandButton_OnPropertyChanged;
+		MinimizeButton.OnPropertyChanged += MinimizeButton_OnPropertyChanged;
+	}
+
+	private void MinimizeButton_OnPropertyChanged(object sender, EventArgs e)
+	{
+		UnhighlightAll();
+		MaximizedElement.SetActive(false);
+		ActiveItem.SetActive(true);
 	}
 
 	private void ExpandButton_OnPropertyChanged(object sender, EventArgs e)
 	{
-		throw new NotImplementedException();
+		UnhighlightAll();
+		MaximizedElement.SetActive(true);
+		ActiveItem.SetActive(false);
 	}
 
 	// Update is called once per frame
@@ -23,8 +37,10 @@ public class cChecklistHandler : MonoBehaviour {
 		
 	}
 
-	private void ExpandButton_Click(object sender)
+	void UnhighlightAll()
 	{
-
+		ExpandButton.UnhighlightButton();
+		MinimizeButton.UnhighlightButton();
+		TakePhotoButton.UnhighlightButton();
 	}
 }

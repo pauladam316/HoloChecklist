@@ -23,18 +23,16 @@ public class cChecklistButton: MonoBehaviour
 	{
 		if (!Highlighted && LookingAtButton())										//highlight if we are looking at it
 		{
-			Highlighted = true;
 			HighlightButton();
 		}
 		else if (Highlighted && !LookingAtButton())
 		{
 			UnhighlightButton();													//otherwise dont
-			Highlighted = false;
 		}
 	}
 
 	private void GestureRecognizer_TappedEvent(InteractionSourceKind source, int tapCount, Ray headRay)
-	{
+	{	
 		if (Highlighted)
 		{
 			OnPropertyChanged(this, new EventArgs());
@@ -45,8 +43,9 @@ public class cChecklistButton: MonoBehaviour
 	 * HighlightButton
 	 * Changes the color to the selected color
 	 */
-	private void HighlightButton()
+	public void HighlightButton()
 	{
+		Highlighted = true;
 		GetComponent<Renderer>().material.SetColor("_Tint", mHighlightedColor);
 	}
 
@@ -54,8 +53,9 @@ public class cChecklistButton: MonoBehaviour
 	 * UnhighlightButton
 	 * Changes the color to the unselected color
 	 */
-	private void UnhighlightButton()
+	public void UnhighlightButton()
 	{
+		Highlighted = false;
 		GetComponent<Renderer>().material.SetColor("_Tint", mNormalColor);
 	}
 

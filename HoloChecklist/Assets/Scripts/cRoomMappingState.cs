@@ -31,9 +31,9 @@ public class cRoomMappingState: IApplicationState
 			mCollider = GameObject.FindObjectOfType<SpatialMappingCollider>();
 		}
 
-		mRenderer.gameObject.SetActive(true);										//Default to active and unfrozen
+		mRenderer.enabled = true;										//Default to active and unfrozen
 		mRenderer.freezeUpdates = false;
-		mCollider.gameObject.SetActive(true);
+		mCollider.enabled = true;
 		mCollider.freezeUpdates = false;
 
 		mUIManager = GameObject.FindObjectOfType<cUIManager>();						//Get the UI Manager
@@ -60,7 +60,7 @@ public class cRoomMappingState: IApplicationState
 	{
 		mCollider.freezeUpdates = true;												//When the user taps, hide and freeze the spatial map, move on to the list placing
 		mRenderer.freezeUpdates = true;
-		mRenderer.gameObject.SetActive(false);
+		mRenderer.enabled = false;
 		mApplicationManager.ChangeState(new cItemPlacingState());
 	}
 }
