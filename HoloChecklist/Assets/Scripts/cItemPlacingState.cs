@@ -1,6 +1,4 @@
-﻿using System.Windows.Storage.Pickers;
-using System.Windows.Storage;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -64,6 +62,10 @@ public class cItemPlacingState : MonoBehaviour, IApplicationState
 	private void GestureRecognizer_TappedEvent(InteractionSourceKind source, int tapCount, Ray headRay)
 	{
 		//FileOpenPicker openPicker = new FileOpenPicker();
+		#if !UNITY_EDITOR
+			Destroy(mIcon.gameObject);
+			OneDriveInteraction.OneDriveHandler.GetFile();
+		#endif	
 	}
 
 }
